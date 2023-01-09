@@ -4,6 +4,9 @@ import speech_recognition as sr
 import numpy
 import ffmpeg
 import pydub
+import youtube_dl
+
+
 uploaded_file = st.file_uploader("File upload", type=['wav','mp4','mp3'])
 
 
@@ -11,7 +14,7 @@ if uploaded_file:
     st.write(uploaded_file.name)
 
     #mp4→wav
-    if str(uploaded_file.name)[-3:] == 'mp4' or 'MOV':
+    if str(uploaded_file.name)[-3:] == 'mp4':
         st.write('this is mp4 file')
         with NamedTemporaryFile(dir='.', suffix='.mp4') as f:
             f.write(uploaded_file.getbuffer())
@@ -75,3 +78,46 @@ if uploaded_file:
                 audio2 = r.record(source2)
             text_from_video = r.recognize_google(audio2, language='ja-JP')
             st.write(text_from_video)
+
+
+#youtubeからダウンロード
+youtube_link = st.text_input(label='Input Youtube Link',value='')
+st.write('input: ', youtube_link)
+
+#テキストボックスが空じゃないとき
+if youtube_link!='':
+    output_file_path = '/app/stella_webapp/'+youtube_link[-5]
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl':  output_file_path + '.%(ext)s',   # 出力先パス
+        'postprocessors': [
+            {'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',                # 出力ファイル形式
+            'preferredquality': '192'},             # 出力ファイルの品質
+            {'key': 'FFmpegMetadata'},
+        ],
+    }
+    url = youtube_link
+
+    ydl = youtube_dl.YoutubeDL(ydl_opts)
+
+    # 指定したパスに音声ファイルが格納される
+    ydl.extract_info(url, download=True)
+    #mp3をwavに
+    with NamedTemporaryFile(dir='.', suffix='.mp3') as f:
+        f.write(uploaded_file.getbuffer())
+        video_file_path = f.name
+        st.write(f.name)
+        #ここで変換
+        sound = pydub.AudioSegment.from_mp3(video_file_path)
+        sound.export(video_file_path+".wav", format="wav")
+        #wav化して再生する
+        audio_file = open(video_file_path+'.wav', 'rb')
+        audio_bytes = audio_file.read()
+        st.audio(audio_bytes, format='audio/wav')
+        #取得したパスを基に音声認識をする
+        r = sr.Recognizer()
+        with sr.AudioFile(output_file_path + '.%(ext)s') as source2:
+            audio2 = r.record(source2)
+        text_from_video = r.recognize_google(audio2, language='ja-JP')
+        st.write(text_from_video)
