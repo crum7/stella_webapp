@@ -102,6 +102,12 @@ if youtube_link!='':
     # 指定したパスに音声ファイルが格納される
     info_dict = ydl.extract_info(url, download=True)
 
+    #mp3で大丈夫か再生する
+    audio_file = open(output_file_path+'.mp3', 'rb')
+    audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format='audio/mp3')
+
+
     #mp3をwavに
     #ここで変換
     sound = pydub.AudioSegment.from_mp3(output_file_path + '.mp3')
