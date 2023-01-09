@@ -2,7 +2,7 @@ from tempfile import NamedTemporaryFile
 import streamlit as st
 import speech_recognition as sr
 import numpy
-import ffmpeg
+
 
 uploaded_file = st.file_uploader("File upload", type=['wav','mp4'])
 
