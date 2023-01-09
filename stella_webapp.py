@@ -1,56 +1,29 @@
-import base64
-import tempfile
+import os
 
 import streamlit as st
-from pdf2image import convert_from_path
+from PIL import Image
 
-from pathlib import Path
 
-def show_pdf(file_path:str):
-    """Show the PDF in Streamlit
-    That returns as html component
-
-    Parameters
-    ----------
-    file_path : [str]
-        Uploaded PDF file path
-    """
-
-    with open(file_path, "rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="1000" type="application/pdf">'
-    st.markdown(pdf_display, unsafe_allow_html=True)
+IMG_PATH = 'imgs'
 
 
 def main():
-    """Streamlit application
-    """
+    st.markdown('# 画像を保存するデモ')
+    file = st.file_uploader('画像をアップロードしてください.', type=['jpg', 'jpeg', 'png'])
+    if file:
+        st.markdown(f'{file.name} をアップロードしました.')
+        img_path = os.path.join(IMG_PATH, file.name)
+        st.write(img_path)
+        # 画像を保存する
+        with open(img_path, 'wb') as f:
+            f.write(file.read())
+            
+        # 保存した画像を表示
+        img = Image.open(img_path)
+        st.image(img)
 
-    st.title("PDF file uplodaer")
-    uploaded_file = st.file_uploader("Choose your .pdf file", type="pdf")
-
-    if uploaded_file is not None:
-        # Make temp file path from uploaded file
-        with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
-            st.markdown("## Original PDF file")
-            fp = Path(tmp_file.name)
-            st.write(fp)
-            fp.write_bytes(uploaded_file.getvalue())
-            st.write(show_pdf(tmp_file.name))
-
-            imgs = convert_from_path(tmp_file.name)
-
-            st.markdown(f"Converted images from PDF")
-            st.image(imgs)
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
-
-
-
-
-
     
 
  
