@@ -14,7 +14,7 @@ if uploaded_file:
         with NamedTemporaryFile(dir='.', suffix='.mp4') as f:
             f.write(uploaded_file.getbuffer())
             video_file_path = f.name
-            st.write(f.name)
+            st.write(video_file_path)
             stream = ffmpeg.input(video_file_path)
             stream = ffmpeg.output(stream, video_file_path+'wav')
             video_file_path = ffmpeg.run(stream)
