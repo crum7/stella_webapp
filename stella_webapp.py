@@ -94,15 +94,15 @@ if youtube_link!='':
             {'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',                # 出力ファイル形式
             'preferredquality': '192'},             # 出力ファイルの品質
-            {'key': 'FFmpegMetadata'},
         ],
     }
     url = youtube_link
 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
-
     # 指定したパスに音声ファイルが格納される
-    ydl.extract_info(url, download=True)
+    info_dict = ydl.extract_info(url, download=True)
+    st.write(info_dict)
+
     #mp3をwavに
     with NamedTemporaryFile(dir='.', suffix='.mp3') as f:
         f.write(uploaded_file.getbuffer())
