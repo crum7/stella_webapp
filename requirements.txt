@@ -1,2 +1,2 @@
 streamlit
-magic
+python-magic
