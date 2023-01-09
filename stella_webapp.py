@@ -1,11 +1,17 @@
 from tempfile import NamedTemporaryFile
 import streamlit as st
-import pandas as pd
+import speech_recognition as sr
 
-uploaded_file = st.file_uploader("File upload", type='csv')
+uploaded_file = st.file_uploader("File upload", type='wav')
 if uploaded_file:
-    with NamedTemporaryFile(dir='.', suffix='.csv') as f:
+    with NamedTemporaryFile(dir='.', suffix='.wav') as f:
         f.write(uploaded_file.getbuffer())
+        video_file_path = f.write
         st.write(f.name)
-        df = pd.read_csv(f.name,encoding='shift_jis')
-        st.write(df)
+
+    #音声認識をする
+    r = sr.Recognizer()
+    with sr.AudioFile(video_file_path) as source2:
+        audio2 = r.record(source2)
+    text_from_video = r.recognize_google(audio2, language='ja-JP')
+    st.write(text_from_video)
