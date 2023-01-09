@@ -1,4 +1,4 @@
-hashlib
+pip install hashlib
 sys
 magic
 string
