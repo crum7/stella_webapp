@@ -6,7 +6,7 @@ uploaded_file = st.file_uploader("File upload", type='wav')
 if uploaded_file:
     with NamedTemporaryFile(dir='.', suffix='.wav') as f:
         f.write(uploaded_file.getbuffer())
-        video_file_path = f.write
+        video_file_path = f.name
         st.write(f.name)
 
     #音声認識をする
