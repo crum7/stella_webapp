@@ -111,7 +111,7 @@ if youtube_link!='':
     #mp3をwavに
     #ここで変換
     sound = pydub.AudioSegment.from_file(output_file_path +'.mp3')
-    sound.export(output_file_path+'.mp3'+".wav", format="wav")
+    sound.export(output_file_path+".wav", format="wav")
     #wav化して再生する
     audio_file = open(output_file_path+'.wav', 'rb')
     audio_bytes = audio_file.read()
