@@ -19,6 +19,9 @@ if uploaded_file:
             stream = ffmpeg.output(stream, video_file_path+'.wav')
             ffmpeg.run(stream,overwrite_output=True)
 
+            st.write(video_file_path)
+            st.write(stream)
+
             #取得したパスを基に音声認識をする
             r = sr.Recognizer()
             with sr.AudioFile(video_file_path) as source2:
