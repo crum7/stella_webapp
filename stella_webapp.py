@@ -89,7 +89,7 @@ if youtube_link!='':
     output_file_path = '/app/stella_webapp/'+youtube_link[-5]
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl':  output_file_path + '.%(ext)s',   # 出力先パス
+        'outtmpl':  output_file_path + '.mp3',   # 出力先パス
         'postprocessors': [
             {'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',                # 出力ファイル形式
