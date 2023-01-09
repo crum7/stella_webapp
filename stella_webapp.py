@@ -19,6 +19,12 @@ if uploaded_file:
             stream = ffmpeg.output(stream, video_file_path+'.wav')
             ffmpeg.run(stream,overwrite_output=True)
 
+            #取得したパスを基に音声認識をする
+            r = sr.Recognizer()
+            with sr.AudioFile(video_file_path) as source2:
+                audio2 = r.record(source2)
+            text_from_video = r.recognize_google(audio2, language='ja-JP')
+            st.write(text_from_video)
 
 
 
