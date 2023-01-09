@@ -1,0 +1,8 @@
+os
+tkinter,tkinter.filedialog, tkinter.messagebox
+hashlib
+sys
+os.path
+magic
+string
+subprocess
