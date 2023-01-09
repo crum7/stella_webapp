@@ -1,4 +1,2 @@
 streamlit
-python-magic
-pdf2image
-pandas
+speech_recognition
