@@ -17,7 +17,7 @@ if uploaded_file:
             st.write(video_file_path)
             stream = ffmpeg.input(video_file_path)
             stream = ffmpeg.output(stream, video_file_path+'wav')
-            video_file_path = ffmpeg.run(stream)
+            ffmpeg.run(stream)
 
 
 
