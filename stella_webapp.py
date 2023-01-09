@@ -16,7 +16,7 @@ if uploaded_file:
             video_file_path = f.name
             st.write(video_file_path)
             stream = ffmpeg.input(video_file_path)
-            stream = ffmpeg.output(stream, video_file_path+'wav')
+            stream = ffmpeg.output(stream, video_file_path+'.wav')
             ffmpeg.run(stream,overwrite_output=True)
 
 
