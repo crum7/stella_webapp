@@ -17,11 +17,12 @@ if uploaded_file:
             st.write(video_file_path)
             stream = ffmpeg.input(video_file_path)
             stream = ffmpeg.output(stream, video_file_path+'.wav')
-            new = ffmpeg.run(stream,overwrite_output=True)
+            ffmpeg.run(stream,overwrite_output=True)
 
-            st.write(video_file_path)
-            st.write(stream)
-            st.write(new)
+            audio_file = open(video_file_path+'.wav', 'rb')
+            audio_bytes = audio_file.read()
+
+            st.audio(audio_bytes, format='audio/wav')
 
             #取得したパスを基に音声認識をする
             r = sr.Recognizer()
