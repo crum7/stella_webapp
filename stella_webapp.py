@@ -9,7 +9,8 @@ uploaded_file = st.file_uploader("File upload", type=['wav','mp4'])
 
 if uploaded_file:
     st.write(uploaded_file.name)
-    if uploaded_file.name[:3] == 'mp4':
+    if str(uploaded_file.name)[:3] == 'mp4':
+        st.write('this is mp4 file')
         with NamedTemporaryFile(dir='.', suffix='.mp4') as f:
             f.write(uploaded_file.getbuffer())
             video_file_path = f.name
