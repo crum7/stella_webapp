@@ -110,7 +110,7 @@ def cut_wav2(filename,time,duration):
         if original_len-current >= 180:
             sound1 = sound[start:DURATION*stom]
         else:
-            sound1 = sound[start:]
+            sound1 = sound[start:time*stom]
 
 
         #ファイルの場所
