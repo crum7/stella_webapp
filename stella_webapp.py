@@ -51,7 +51,7 @@ if uploaded_file:
                 if duration >DURATION: 
                     while current < duration:
                         start = current
-                        stream = ffmpeg.input(wav_file_path, ss=start, t=180)
+                        stream = ffmpeg.input(wav_file_path, ss=start, t=60)
                         stream = ffmpeg.output(stream, video_file_path[:-4]+f'/output/{idx}.wav', c='copy')
                         ffmpeg.run(stream,overwrite_output=True)
                         idx += 1
