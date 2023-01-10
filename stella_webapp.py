@@ -157,6 +157,10 @@ if uploaded_file:
                     audio_bytes = audio_file.read()
                     st.audio(audio_bytes, format='audio/wav')
                 
+                    audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+                
 
 
 
@@ -171,7 +175,8 @@ if uploaded_file:
                             audio2 = r.record(source2)
                         text_from_video = r.recognize_google(audio2, language='ja-JP')
                         st.write(text_from_video)
-                
+
+                        
                 else:
                     #取得したパスを基に音声認識をする
                     r = sr.Recognizer()
