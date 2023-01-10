@@ -44,15 +44,24 @@ if uploaded_file:
                 duration = get_playback_seconds_of_movie(video_file_path+'.wav')
                 current = 0
                 idx = 1
-                while current < duration:
-                    start = current
-                    stream = ffmpeg.input(video_file_path+'.wav', ss=start, t=DURATION)
-                    stream = ffmpeg.output(stream, f'video_file_path/outputs/{idx}.wav', c='copy')
-                    ffmpeg.run(stream,overwrite_output=True)
-                    idx += 1
-                    current += DURATION
+                if duration >DURATION: 
+                    while current < duration:
+                        start = current
+                        stream = ffmpeg.input(video_file_path+'.wav', ss=start, t=DURATION)
+                        stream = ffmpeg.output(stream, f'video_file_path/outputs/{idx}.wav', c='copy')
+                        ffmpeg.run(stream,overwrite_output=True)
+                        idx += 1
+                        current += DURATION
+                    
+                    for fname in os.listdir('video_file_path/outputs'):
+                        #取得したパスを基に音声認識をする
+                        r = sr.Recognizer()
+                        with sr.AudioFile(fname) as source2:
+                            audio2 = r.record(source2)
+                        text_from_video = r.recognize_google(audio2, language='ja-JP')
+                        st.write(text_from_video)
                 
-                for fname in os.listdir('video_file_path/outputs'):
+                else:
                     #取得したパスを基に音声認識をする
                     r = sr.Recognizer()
                     with sr.AudioFile(video_file_path+'.wav') as source2:
