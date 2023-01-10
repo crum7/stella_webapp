@@ -87,7 +87,7 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         idx += 1
         current += DURATION
         
-    st.write('もとの長さ'+original_len)
+    st.write('もとの長さ'+str(original_len))
 
 
 
