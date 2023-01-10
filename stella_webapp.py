@@ -49,7 +49,7 @@ if uploaded_file:
                     while current < duration:
                         start = current
                         stream = ffmpeg.input(video_file_path+'.wav', ss=start, t=DURATION)
-                        stream = ffmpeg.output(stream, f'video_file_path/outputs/{idx}.wav', c='copy')
+                        stream = ffmpeg.output(stream, f'video_file_path/{idx}.wav', c='copy')
                         ffmpeg.run(stream,overwrite_output=True)
                         idx += 1
                         current += DURATION
