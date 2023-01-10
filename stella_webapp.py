@@ -48,13 +48,13 @@ if uploaded_file:
                 if duration >DURATION: 
                     while current < duration:
                         start = current
-                        stream = ffmpeg.input(video_file_path+'.wav', ss=start, t=DURATION)
+                        stream = ffmpeg.input(video_file_path[:-3]+'.wav', ss=start, t=DURATION)
                         stream = ffmpeg.output(stream, video_file_path+f'/output/{idx}.wav', c='copy')
                         ffmpeg.run(stream,overwrite_output=True)
                         idx += 1
                         current += DURATION
                     
-                    for fname in os.listdir('video_file_path/outputs'):
+                    for fname in os.listdir(video_file_path+'/outputs'):
                         #取得したパスを基に音声認識をする
                         r = sr.Recognizer()
                         with sr.AudioFile(fname) as source2:
