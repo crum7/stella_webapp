@@ -36,7 +36,7 @@ if uploaded_file:
 
                 #ここで変換
                 stream = ffmpeg.input(video_file_path)
-                stream = ffmpeg.output(stream, video_file_path[:-4]+'.wav')
+                stream = ffmpeg.output(stream, video_file_path+'.wav')
                 ffmpeg.run(stream,overwrite_output=True)
 
                 wav_file_path = video_file_path+'.wav'
