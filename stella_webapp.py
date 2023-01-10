@@ -33,12 +33,13 @@ def cut_wav2(filename,duration):
     idx = 1
 
     while original_len-current>=0:
-        
+        st.write('original_len-current:'+str(original_len-current))
         #通常に3分に分割
         if original_len-current >= 180:
             sound1 = sound[current:180*stom]
         #動画の一番最後で3分に満たない
         else:
+            st.write('180秒以下')
             sound1 = sound[current*stom:]
         #ファイルの場所
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav'
