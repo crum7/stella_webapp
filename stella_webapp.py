@@ -69,7 +69,7 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         start_cut = start*frames
         if original_len-current >=180:
             end_cut = start*frames + frames
-        elif original_len-current >=180:
+        elif original_len-current <=180:
             end_cut = start*frames + original_len-current
 
         st.write('end_cut'+str(end_cut))
