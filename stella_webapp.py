@@ -56,10 +56,12 @@ if uploaded_file:
                         ffmpeg.run(stream,overwrite_output=True)
                         idx += 1
                         current += DURATION
+                        st.write(current)
+
+
+
                     st.write(os.listdir(video_file_path[:-4]+'/output/'))
 
-
-                
                     #再生
                     audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
                     audio_bytes = audio_file.read()
