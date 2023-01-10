@@ -36,7 +36,7 @@ if uploaded_file:
 
                 #ここで変換
                 stream = ffmpeg.input(video_file_path)
-                stream = ffmpeg.output(stream, video_file_path+'.wav')
+                stream = ffmpeg.output(stream, video_file_path[:-4]+'.wav')
                 ffmpeg.run(stream,overwrite_output=True)
 
                 wav_file_path = video_file_path+'.wav'
@@ -45,7 +45,7 @@ if uploaded_file:
 
                 #動画分割
                 duration = get_playback_seconds_of_movie(wav_file_path)
-                current = 1
+                current = 0
                 idx = 1
                 #動画が、3分以上のときに行う
                 if duration >DURATION: 
