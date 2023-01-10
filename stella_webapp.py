@@ -63,10 +63,14 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
 
     while original_len-current>=0:
         start = current
+        st.write(current)
         # 出力データを生成
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav' 
         start_cut = start*frames
-        end_cut = start*frames + frames
+        if original_len-current >=180:
+            end_cut = start*frames + frames
+        elif original_len-current >=180:
+            end_cut = start*frames + original_len-current
         print(start_cut)
         print(end_cut)
         Y = X[start_cut:end_cut]
@@ -82,8 +86,8 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         
         idx += 1
         current += DURATION
-        st.write(current)
-        st.write(original_len)
+        
+    st.write('もとの長さ'+original_len)
 
 
 
