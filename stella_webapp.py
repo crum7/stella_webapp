@@ -61,7 +61,7 @@ if uploaded_file:
                         #取得したパスを基に音声認識をする
                         st.write(video_file_path[:-4]+'/output/'+fname)
                         r = sr.Recognizer()
-                        with sr.AudioFile(fname) as source2:
+                        with sr.AudioFile(video_file_path[:-4]+'/output/'+fname) as source2:
                             audio2 = r.record(source2)
                         text_from_video = r.recognize_google(audio2, language='ja-JP')
                         st.write(text_from_video)
