@@ -62,10 +62,9 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
             Y = X[start_cut:end_cut]
         elif original_len-current <=180:
             st.write('180秒以下です。')
-            end_cut = int(original_len-1)*frames
             Y = X[start_cut:]
         
-        
+        Y = X[start_cut:]
         st.write('start_cut'+str(start_cut))
         st.write('end_cut'+str(end_cut))
         st.write('original_len-current:'+str(original_len-current))
@@ -155,10 +154,11 @@ if uploaded_file:
                     st.write(os.listdir(video_file_path[:-4]+'/output/'))
 
                     #再生
+                    '''
                     audio_file = open(video_file_path[:-4]+'/output/1.wav', 'rb')
                     audio_bytes = audio_file.read()
                     st.audio(audio_bytes, format='audio/wav')
-                
+                '''
                     audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
                     audio_bytes = audio_file.read()
                     st.audio(audio_bytes, format='audio/wav')
