@@ -67,12 +67,16 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         # 出力データを生成
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav' 
         start_cut = start*frames
-        if original_len-current >=180:
+        
+        if original_len-current >= 180:
             end_cut = start*frames + frames
         elif original_len-current <=180:
             end_cut = start*frames + int(original_len-current)
+        
+        
         st.write('start_cut'+str(start_cut))
         st.write('end_cut'+str(end_cut))
+        st.write('original_len-current:'+original_len-current)
         print(start_cut)
         print(end_cut)
         Y = X[start_cut:end_cut]
@@ -274,6 +278,5 @@ if youtube_link!='':
         text_from_video = r.recognize_google(audio2, language='ja-JP')
         st.write(text_from_video)
     st.success('Done!')
-
 
 
