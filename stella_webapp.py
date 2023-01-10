@@ -105,6 +105,19 @@ if uploaded_file:
                     #分割した動画を保存してあるパスへのリンク
                     saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
                     new_list_reverse = sorted(saved_splited_wav_path)
+
+                    audio_file = open(new_list_reverse[0], 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+
+                    audio_file = open(new_list_reverse[1], 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+
+                    audio_file = open(new_list_reverse[2], 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+
                 
                     for fname in new_list_reverse:
                         #取得したパスを基に音声認識をする
