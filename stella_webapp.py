@@ -33,13 +33,13 @@ def cut_wav2(filename,duration):
     idx = 1
 
     while original_len-current>=0:
-        st.write('original_len-current:'+str(original_len-current))
+        #st.write('original_len-current:'+str(original_len-current))
         #通常に3分に分割
         if original_len-current >= 180:
             sound1 = sound[current*stom:(current+180)*stom]
         #動画の一番最後で3分に満たない
         else:
-            st.write('180秒以下')
+            #st.write('180秒以下')
             sound1 = sound[current*stom:]
         #ファイルの場所
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav'
@@ -171,7 +171,6 @@ if uploaded_file:
                     #分割した動画を保存してあるパスへのリンク
                     saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
                     new_list_reverse = sorted(saved_splited_wav_path)
-                    st.write(new_list_reverse)
                 
                     for fname in new_list_reverse:
                         #取得したパスを基に音声認識をする
@@ -208,15 +207,48 @@ if uploaded_file:
             with NamedTemporaryFile(dir='.', suffix='.wav') as f:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
-                
 
-                #取得したパスを基に音声認識をする
-                r = sr.Recognizer()
-                with sr.AudioFile(video_file_path) as source2:
-                    audio2 = r.record(source2)
-                text_from_video = r.recognize_google(audio2, language='ja-JP')
-                st.write(text_from_video)
+
+                wav_file_path = video_file_path+'.wav'
+
+                #動画の長さ
+                duration = get_playback_seconds_of_movie(wav_file_path)
+
+                #動画が、3分以上のときに行う
+                if duration >180: 
+                    #ディレクトリを生成
+                    os.makedirs(video_file_path[:-4]+'/output/')
+
+                    #動画を3分ずつに分割
+                    f_name = wav_file_path
+                    cut_time = 180
+                    cut_wav2(f_name,duration)
+
+                    #分割した動画を保存してあるパスへのリンク
+                    saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
+                    new_list_reverse = sorted(saved_splited_wav_path)
+                
+                    for fname in new_list_reverse:
+                        #取得したパスを基に音声認識をする
+                        r = sr.Recognizer()
+                        with sr.AudioFile(video_file_path[:-4]+'/output/'+fname) as source2:
+                            audio2 = r.record(source2)
+                        text_from_video = r.recognize_google(audio2, language='ja-JP')
+                        st.write(text_from_video+'\n')
+
+                #動画が3分以内
+                else:
+                    #取得したパスを基に音声認識をする
+                    r = sr.Recognizer()
+                    with sr.AudioFile(wav_file_path) as source2:
+                        audio2 = r.record(source2)
+                    text_from_video = r.recognize_google(audio2, language='ja-JP')
+                    st.write(text_from_video)
+
         st.success('Done!')
+
+
+
 
 
 #youtubeからダウンロード
@@ -226,10 +258,10 @@ st.write('input: ', youtube_link)
 #テキストボックスが空じゃないとき
 if youtube_link!='':
     with st.spinner('Download...'):
-        output_file_path = '/app/stella_webapp/'+youtube_link[-5:]
+        video_file_path = '/app/stella_webapp/'+youtube_link[-5:]
         ydl_opts = {
             'format': 'bestaudio/best',
-            'outtmpl':  output_file_path + '.mp3',   # 出力先パス
+            'outtmpl':  video_file_path + '.mp3',   # 出力先パス
             'postprocessors': [
                 {'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',                # 出力ファイル形式
@@ -246,15 +278,45 @@ if youtube_link!='':
     #mp3をwavに
     #ここで変換
     with st.spinner('Wait for it...'):
-        sound = pydub.AudioSegment.from_file(output_file_path +'.mp3')
-        sound.export(output_file_path+".wav", format="wav")
-        
+        sound = pydub.AudioSegment.from_file(video_file_path +'.mp3')
+        sound.export(video_file_path+".wav", format="wav")
 
-        #取得したパスを基に音声認識をする
-        r = sr.Recognizer()
-        with sr.AudioFile(output_file_path+'.wav') as source2:
-            audio2 = r.record(source2)
-        text_from_video = r.recognize_google(audio2, language='ja-JP')
-        st.write(text_from_video)
+
+        wav_file_path = video_file_path+'.wav'
+
+        #動画の長さ
+        duration = get_playback_seconds_of_movie(wav_file_path)
+
+        #動画が、3分以上のときに行う
+        if duration >180: 
+            #ディレクトリを生成
+            os.makedirs(video_file_path[:-4]+'/output/')
+
+            #動画を3分ずつに分割
+            f_name = wav_file_path
+            cut_time = 180
+            cut_wav2(f_name,duration)
+
+            #分割した動画を保存してあるパスへのリンク
+            saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
+            new_list_reverse = sorted(saved_splited_wav_path)
+        
+            for fname in new_list_reverse:
+                #取得したパスを基に音声認識をする
+                r = sr.Recognizer()
+                with sr.AudioFile(video_file_path[:-4]+'/output/'+fname) as source2:
+                    audio2 = r.record(source2)
+                text_from_video = r.recognize_google(audio2, language='ja-JP')
+                st.write(text_from_video+'\n')
+
+        #動画が3分以内
+        else:
+            #取得したパスを基に音声認識をする
+            r = sr.Recognizer()
+            with sr.AudioFile(wav_file_path) as source2:
+                audio2 = r.record(source2)
+            text_from_video = r.recognize_google(audio2, language='ja-JP')
+            st.write(text_from_video)
+
     st.success('Done!')
 
