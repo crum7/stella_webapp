@@ -80,6 +80,8 @@ def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてる�
         idx += 1
         current += DURATION
         st.write(current)
+        st.write(time)
+
 
 
 
