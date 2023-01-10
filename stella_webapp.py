@@ -36,7 +36,7 @@ def cut_wav2(filename,duration):
         st.write('original_len-current:'+str(original_len-current))
         #通常に3分に分割
         if original_len-current >= 180:
-            sound1 = sound[current*stom:current*stom]
+            sound1 = sound[current*stom:(current+180)*stom]
         #動画の一番最後で3分に満たない
         else:
             st.write('180秒以下')
