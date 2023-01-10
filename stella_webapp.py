@@ -62,7 +62,7 @@ if uploaded_file:
                     for fname in os.listdir(video_file_path[:-4]+'/output/'):
                     
                         #再生
-                        audio_file = open(fname, 'rb')
+                        audio_file = open(video_file_path[:-4]+'/output/'+fname, 'rb')
                         audio_bytes = audio_file.read()
                         st.audio(audio_bytes, format='audio/wav')
 
