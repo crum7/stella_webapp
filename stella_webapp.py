@@ -77,7 +77,7 @@ if uploaded_file:
 
     #mp4→wav
     if str(uploaded_file.name)[-3:] == 'mp4':
-        with st.spinner('Wait for it...'):
+        with st.spinner('voice to text...'):
             with NamedTemporaryFile(dir='.', suffix='.mp4') as f:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
@@ -142,7 +142,7 @@ if uploaded_file:
 
     #mp3→wavにする
     elif str(uploaded_file.name)[-3:] == 'mp3':
-        with st.spinner('Wait for it...'):
+        with st.spinner('voice to text...'):
             #streamlitのuploaderは、ByteIOなのでそれを.wav形式に直す。
             #フルパスをvideo_file_pathに入れている
             with NamedTemporaryFile(dir='.', suffix='.mp3') as f:
@@ -201,7 +201,7 @@ if uploaded_file:
 
     #wav
     else:
-        with st.spinner('Wait for it...'):
+        with st.spinner('voice to text...'):
             #streamlitのuploaderは、ByteIOなのでそれを.wav形式に直す。
             #フルパスをvideo_file_pathに入れている
             with NamedTemporaryFile(dir='.', suffix='.wav') as f:
@@ -277,7 +277,7 @@ if youtube_link!='':
 
     #mp3をwavに
     #ここで変換
-    with st.spinner('Wait for it...'):
+    with st.spinner('voice to text...'):
         sound = pydub.AudioSegment.from_file(video_file_path +'.mp3')
         sound.export(video_file_path+".wav", format="wav")
 
