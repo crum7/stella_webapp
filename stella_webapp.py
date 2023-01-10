@@ -39,17 +39,19 @@ if uploaded_file:
                 stream = ffmpeg.output(stream, video_file_path+'.wav')
                 ffmpeg.run(stream,overwrite_output=True)
 
+                wav_file_path = video_file_path+'.wav'
+
 
                 #動画分割
-                duration = get_playback_seconds_of_movie(video_file_path+'.wav')
+                duration = get_playback_seconds_of_movie(wav_file_path)
                 current = 0
                 idx = 1
                 #動画が、3分以上のときに行う
                 if duration >DURATION: 
                     while current < duration:
                         start = current
-                        stream = ffmpeg.input(video_file_path[:-3]+'.wav', ss=start, t=DURATION)
-                        stream = ffmpeg.output(stream, video_file_path+f'/output/{idx}.wav', c='copy')
+                        stream = ffmpeg.input(wav_file_path, ss=start, t=DURATION)
+                        stream = ffmpeg.output(stream, video_file_path[:-4]+f'/output/{idx}.wav', c='copy')
                         ffmpeg.run(stream,overwrite_output=True)
                         idx += 1
                         current += DURATION
