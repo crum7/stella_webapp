@@ -4,3 +4,6 @@ ffmpeg-python
 ffmpeg
 pydub
 youtube_dl
+scipy
+wave
+struct
