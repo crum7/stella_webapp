@@ -157,6 +157,7 @@ if uploaded_file:
                     #分割した動画を保存してあるパスへのリンク
                     saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
                     new_list_reverse = sorted(saved_splited_wav_path)
+                    st.write(new_list_reverse)
                 
                     for fname in new_list_reverse:
                         #取得したパスを基に音声認識をする
