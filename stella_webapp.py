@@ -110,7 +110,8 @@ def cut_wav2(filename,time,duration):
         if original_len-current >= 180:
             sound1 = sound[start:DURATION*stom]
         else:
-            sound1 = sound[start:time*stom]
+            st.write('180秒以下')
+            sound1 = sound[start:duration*stom]
 
 
         #ファイルの場所
@@ -164,7 +165,7 @@ if uploaded_file:
                 os.makedirs(video_file_path[:-4]+'/output/')
 
 
-                #動画分割
+                #動画の長さ
                 duration = get_playback_seconds_of_movie(wav_file_path)
                 current = 0
                 idx = 1
