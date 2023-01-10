@@ -147,7 +147,7 @@ if uploaded_file:
                     st.write(os.listdir(video_file_path[:-4]+'/output/'))
 
                     #再生
-                    audio_file = open(video_file_path[:-4]+'/output/0.wav', 'rb')
+                    audio_file = open(video_file_path[:-4]+'/output/1.wav', 'rb')
                     audio_bytes = audio_file.read()
                     st.audio(audio_bytes, format='audio/wav')
                 
