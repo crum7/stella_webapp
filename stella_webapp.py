@@ -7,12 +7,85 @@ import pydub
 import youtube_dl
 import math
 import os
+import wave
+import struct
+from scipy import fromstring, int16
 
 DURATION = 180  # 300 秒ごとに分割する
 
 # 動画の再生時間(秒)を返却する ※小数点は切り上げる
 def get_playback_seconds_of_movie(fpath):
     return math.ceil(float(ffmpeg.probe(fpath)['streams'][0]['duration']))
+
+
+def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてるだろ？ 
+    # timeの単位は[sec]
+
+    # ファイルを読み出し
+    wavf = filename
+    wr = wave.open(wavf, 'r')
+
+    # waveファイルが持つ性質を取得
+    ch = wr.getnchannels()
+    width = wr.getsampwidth()
+    fr = wr.getframerate()
+    fn = wr.getnframes()
+    total_time = 1.0 * fn / fr
+    integer = math.floor(total_time) # 小数点以下切り捨て
+    t = int(time)  # 秒数[sec]
+    frames = int(ch * fr * t)
+    num_cut = int(integer//t)
+
+    #　確認用
+    print("Channel: ", ch)
+    print("Sample width: ", width)
+    print("Frame Rate: ", fr)
+    print("Frame num: ", fn)
+    print("Params: ", wr.getparams())
+    print("Total time: ", total_time)
+    print("Total time(integer)",integer)
+    print("Time: ", t) 
+    print("Frames: ", frames) 
+    print("Number of cut: ",num_cut)
+
+    # waveの実データを取得し、数値化
+    data = wr.readframes(wr.getnframes())
+    wr.close()
+    X = fromstring(data, dtype=int16)
+    print(X)
+
+
+    for i in range(num_cut):
+        print(i)
+        # 出力データを生成
+        outf = video_file_path[:-4]+'/output/' + str(i) + '.wav' 
+        start_cut = i*frames
+        end_cut = i*frames + frames
+        print(start_cut)
+        print(end_cut)
+        Y = X[start_cut:end_cut]
+        outd = struct.pack("h" * len(Y), *Y)
+
+        # 書き出し
+        ww = wave.open(outf, 'w')
+        ww.setnchannels(ch)
+        ww.setsampwidth(width)
+        ww.setframerate(fr)
+        ww.writeframes(outd)
+        ww.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -49,6 +122,7 @@ if uploaded_file:
                 idx = 1
                 #動画が、3分以上のときに行う
                 if duration >DURATION: 
+                    '''
                     while current < duration:
                         start = current
                         stream = ffmpeg.input(wav_file_path, ss=start, t=60)
@@ -57,6 +131,10 @@ if uploaded_file:
                         idx += 1
                         current += DURATION
                         st.write(current)
+                    '''
+                    f_name = wav_file_path
+                    cut_time = 180
+                    cut_wav(f_name,cut_time)
 
 
 
