@@ -25,6 +25,9 @@ def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてる�
     wavf = filename
     wr = wave.open(wavf, 'r')
 
+    #元ファイルの長さ取得
+    original_len = get_playback_seconds_of_movie(filename)
+
     # waveファイルが持つ性質を取得
     ch = wr.getnchannels()
     width = wr.getsampwidth()
@@ -58,7 +61,7 @@ def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてる�
     current = 0
     idx = 1
 
-    while current < DURATION:
+    while original_len-current<=0:
         start = current
         # 出力データを生成
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav' 
@@ -80,7 +83,7 @@ def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてる�
         idx += 1
         current += DURATION
         st.write(current)
-        st.write(time)
+        st.write(original_len)
 
 
 
