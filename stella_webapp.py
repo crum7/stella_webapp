@@ -59,14 +59,21 @@ if uploaded_file:
                     st.write(os.listdir(video_file_path[:-4]+'/output/'))
 
 
+                
+                    #再生
+                    audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+                
+                    #再生
+                    audio_file = open(video_file_path[:-4]+'/output/1.wav', 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+
+
+
+
                     for fname in os.listdir(video_file_path[:-4]+'/output/'):
-                    
-                        #再生
-                        audio_file = open(video_file_path[:-4]+'/output/'+fname, 'rb')
-                        audio_bytes = audio_file.read()
-                        st.audio(audio_bytes, format='audio/wav')
-
-
 
                         #取得したパスを基に音声認識をする
                         st.write(video_file_path[:-4]+'/output/'+fname)
