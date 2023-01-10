@@ -61,7 +61,7 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
     current = 0
     idx = 1
 
-    while original_len-current<=0:
+    while original_len-current>=0:
         start = current
         # 出力データを生成
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav' 
