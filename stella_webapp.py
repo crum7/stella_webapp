@@ -60,16 +60,15 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         if original_len-current >= 180:
             end_cut = start*frames + frames
         elif original_len-current <=180:
-            end_cut = original_len
+            end_cut = original_len*frames
         
         
         st.write('start_cut'+str(start_cut))
         st.write('end_cut'+str(end_cut))
         st.write('original_len-current:'+str(original_len-current))
         
-        Y = X[0:1800000]
 
-        #Y = X[start_cut:end_cut]
+        Y = X[start_cut:end_cut]
         outd = struct.pack("h" * len(Y), *Y)
 
         # 書き出し
