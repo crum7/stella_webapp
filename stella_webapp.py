@@ -64,7 +64,7 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
             st.write('180秒以下です。')
             Y = X[start_cut:]
         
-        Y = X[start_cut:]
+        Y = X[180:]
         st.write('start_cut'+str(start_cut))
         st.write('end_cut'+str(end_cut))
         st.write('original_len-current:'+str(original_len-current))
