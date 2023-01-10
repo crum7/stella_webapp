@@ -88,7 +88,6 @@ if uploaded_file:
 
                 wav_file_path = video_file_path+'.wav'
 
-
                 #動画の長さ
                 duration = get_playback_seconds_of_movie(wav_file_path)
 
@@ -136,19 +135,51 @@ if uploaded_file:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
                 
+                wav_file_path = video_file_path+'.wav'
 
-                #ここで変換
-                sound = pydub.AudioSegment.from_mp3(video_file_path)
-                sound.export(video_file_path+".wav", format="wav")
+                #動画の長さ
+                duration = get_playback_seconds_of_movie(wav_file_path)
 
+                #動画が、3分以上のときに行う
+                if duration >180: 
+                    #ディレクトリを生成
+                    os.makedirs(video_file_path[:-4]+'/output/')
 
-                #取得したパスを基に音声認識をする
-                r = sr.Recognizer()
-                with sr.AudioFile(video_file_path+'.wav') as source2:
-                    audio2 = r.record(source2)
-                text_from_video = r.recognize_google(audio2, language='ja-JP')
-                st.write(text_from_video)
+                    #動画を3分ずつに分割
+                    f_name = wav_file_path
+                    cut_time = 180
+                    cut_wav2(f_name,duration)
+
+                    #分割した動画を保存してあるパスへのリンク
+                    saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
+                    new_list_reverse = sorted(saved_splited_wav_path)
+                
+                    for fname in new_list_reverse:
+                        #取得したパスを基に音声認識をする
+                        r = sr.Recognizer()
+                        with sr.AudioFile(video_file_path[:-4]+'/output/'+fname) as source2:
+                            audio2 = r.record(source2)
+                        text_from_video = r.recognize_google(audio2, language='ja-JP')
+                        st.write(text_from_video+'\n')
+
+                #動画が3分以内
+                else:
+                    #取得したパスを基に音声認識をする
+                    r = sr.Recognizer()
+                    with sr.AudioFile(video_file_path+'.wav') as source2:
+                        audio2 = r.record(source2)
+                    text_from_video = r.recognize_google(audio2, language='ja-JP')
+                    st.write(text_from_video)
+                    
         st.success('Done!')
+
+
+
+
+
+
+
+
 
     #wav
     else:
