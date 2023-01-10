@@ -8,7 +8,7 @@ import youtube_dl
 import math
 import os
 
-DURATION = 300  # 300 秒ごとに分割する
+DURATION = 180  # 300 秒ごとに分割する
 
 # 動画の再生時間(秒)を返却する ※小数点は切り上げる
 def get_playback_seconds_of_movie(fpath):
