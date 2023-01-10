@@ -40,6 +40,7 @@ if uploaded_file:
                 ffmpeg.run(stream,overwrite_output=True)
 
                 wav_file_path = video_file_path+'.wav'
+                os.makedirs(video_file_path[:-4]+'/output/')
 
 
                 #動画分割
