@@ -45,7 +45,7 @@ if uploaded_file:
 
                 #動画分割
                 duration = get_playback_seconds_of_movie(wav_file_path)
-                current = 0
+                current = 1
                 idx = 1
                 #動画が、3分以上のときに行う
                 if duration >DURATION: 
