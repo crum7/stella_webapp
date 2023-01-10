@@ -5,9 +5,24 @@ import numpy
 import ffmpeg
 import pydub
 import youtube_dl
+import math
+import os
+
+DURATION = 300  # 300 秒ごとに分割する
+
+# 動画の再生時間(秒)を返却する ※小数点は切り上げる
+def get_playback_seconds_of_movie(fpath):
+    return math.ceil(float(ffmpeg.probe(fpath)['streams'][0]['duration']))
+
+
+
+
+
+
 
 
 uploaded_file = st.file_uploader("File upload", type=['wav','mp4','mp3'])
+
 
 
 if uploaded_file:
@@ -23,14 +38,27 @@ if uploaded_file:
                 stream = ffmpeg.input(video_file_path)
                 stream = ffmpeg.output(stream, video_file_path+'.wav')
                 ffmpeg.run(stream,overwrite_output=True)
-                
 
-                #取得したパスを基に音声認識をする
-                r = sr.Recognizer()
-                with sr.AudioFile(video_file_path+'.wav') as source2:
-                    audio2 = r.record(source2)
-                text_from_video = r.recognize_google(audio2, language='ja-JP')
-                st.write(text_from_video)
+
+                #動画分割
+                duration = get_playback_seconds_of_movie(video_file_path+'.wav')
+                current = 0
+                idx = 1
+                while current < duration:
+                    start = current
+                    stream = ffmpeg.input(video_file_path+'.wav', ss=start, t=DURATION)
+                    stream = ffmpeg.output(stream, f'video_file_path/outputs/{idx}.wav', c='copy')
+                    ffmpeg.run(stream)
+                    idx += 1
+                    current += DURATION
+                
+                for fname in os.listdir('video_file_path/outputs'):
+                    #取得したパスを基に音声認識をする
+                    r = sr.Recognizer()
+                    with sr.AudioFile(video_file_path+'.wav') as source2:
+                        audio2 = r.record(source2)
+                    text_from_video = r.recognize_google(audio2, language='ja-JP')
+                    st.write(text_from_video)
         st.success('Done!')
 
 
