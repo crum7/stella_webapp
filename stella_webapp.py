@@ -11,7 +11,6 @@ uploaded_file = st.file_uploader("File upload", type=['wav','mp4','mp3'])
 
 
 if uploaded_file:
-    st.write(uploaded_file.name)
 
     #mp4→wav
     if str(uploaded_file.name)[-3:] == 'mp4':
@@ -19,17 +18,12 @@ if uploaded_file:
             with NamedTemporaryFile(dir='.', suffix='.mp4') as f:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
-                st.write(video_file_path)
 
                 #ここで変換
                 stream = ffmpeg.input(video_file_path)
                 stream = ffmpeg.output(stream, video_file_path+'.wav')
                 ffmpeg.run(stream,overwrite_output=True)
                 
-                #wav化して再生する
-                audio_file = open(video_file_path+'.wav', 'rb')
-                audio_bytes = audio_file.read()
-                st.audio(audio_bytes, format='audio/wav')
 
                 #取得したパスを基に音声認識をする
                 r = sr.Recognizer()
@@ -49,16 +43,12 @@ if uploaded_file:
             with NamedTemporaryFile(dir='.', suffix='.mp3') as f:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
-                st.write(f.name)
+                
 
                 #ここで変換
                 sound = pydub.AudioSegment.from_mp3(video_file_path)
                 sound.export(video_file_path+".wav", format="wav")
 
-                #wav化して再生する
-                audio_file = open(video_file_path+'.wav', 'rb')
-                audio_bytes = audio_file.read()
-                st.audio(audio_bytes, format='audio/wav')
 
                 #取得したパスを基に音声認識をする
                 r = sr.Recognizer()
@@ -76,7 +66,7 @@ if uploaded_file:
             with NamedTemporaryFile(dir='.', suffix='.wav') as f:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
-                st.write(f.name)
+                
 
                 #取得したパスを基に音声認識をする
                 r = sr.Recognizer()
@@ -117,10 +107,7 @@ if youtube_link!='':
         sound = pydub.AudioSegment.from_file(output_file_path +'.mp3')
         sound.export(output_file_path+".wav", format="wav")
         
-        #wav化して再生する
-        audio_file = open(output_file_path+'.wav', 'rb')
-        audio_bytes = audio_file.read()
-        st.audio(audio_bytes, format='audio/wav')
+
         #取得したパスを基に音声認識をする
         r = sr.Recognizer()
         with sr.AudioFile(output_file_path+'.wav') as source2:
