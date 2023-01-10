@@ -59,6 +59,7 @@ if uploaded_file:
                     
                     for fname in os.listdir(video_file_path[:-4]+'/output/'):
                         #取得したパスを基に音声認識をする
+                        st.write(fname)
                         r = sr.Recognizer()
                         with sr.AudioFile(fname) as source2:
                             audio2 = r.record(source2)
