@@ -18,7 +18,7 @@ def get_playback_seconds_of_movie(fpath):
     return math.ceil(float(ffmpeg.probe(fpath)['streams'][0]['duration']))
 
 
-def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてるだろ？ 
+def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形をしてるだろ？ 
     # timeの単位は[sec]
 
     # ファイルを読み出し
@@ -26,7 +26,7 @@ def cut_wav(filename,time):  # WAVファイルを刈り奪る　形をしてる�
     wr = wave.open(wavf, 'r')
 
     #元ファイルの長さ取得
-    original_len = get_playback_seconds_of_movie(filename)
+    original_len = duration
 
     # waveファイルが持つ性質を取得
     ch = wr.getnchannels()
@@ -146,7 +146,7 @@ if uploaded_file:
                     '''
                     f_name = wav_file_path
                     cut_time = 180
-                    cut_wav(f_name,cut_time)
+                    cut_wav(f_name,cut_time,duration)
 
 
 
