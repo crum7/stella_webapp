@@ -135,6 +135,10 @@ if uploaded_file:
                 f.write(uploaded_file.getbuffer())
                 video_file_path = f.name
                 
+                #ここで変換
+                sound = pydub.AudioSegment.from_mp3(video_file_path)
+                sound.export(video_file_path+".wav", format="wav")
+
                 wav_file_path = video_file_path+'.wav'
 
                 #動画の長さ
@@ -166,11 +170,11 @@ if uploaded_file:
                 else:
                     #取得したパスを基に音声認識をする
                     r = sr.Recognizer()
-                    with sr.AudioFile(video_file_path+'.wav') as source2:
+                    with sr.AudioFile(wav_file_path) as source2:
                         audio2 = r.record(source2)
                     text_from_video = r.recognize_google(audio2, language='ja-JP')
                     st.write(text_from_video)
-                    
+
         st.success('Done!')
 
 
