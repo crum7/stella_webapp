@@ -77,9 +77,10 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         st.write('start_cut'+str(start_cut))
         st.write('end_cut'+str(end_cut))
         st.write('original_len-current:'+str(original_len-current))
-        print(start_cut)
-        print(end_cut)
-        Y = X[start_cut:end_cut]
+        
+        Y = X[180:296]
+
+        #Y = X[start_cut:end_cut]
         outd = struct.pack("h" * len(Y), *Y)
 
         # 書き出し
