@@ -10,6 +10,7 @@ import os
 import wave
 import struct
 from scipy import fromstring, int16
+from pydub import AudioSegment
 
 DURATION = 180  # 300 秒ごとに分割する
 
@@ -18,7 +19,10 @@ def get_playback_seconds_of_movie(fpath):
     return math.ceil(float(ffmpeg.probe(fpath)['streams'][0]['duration']))
 
 
-def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形をしてるだろ？ 
+def cut_wav(filename,time,duration):
+
+
+
     # timeの単位は[sec]
 
     # ファイルを読み出し
@@ -60,7 +64,7 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         if original_len-current >= 180:
             end_cut = start*frames + frames
             Y = X[start_cut:end_cut]
-        elif original_len-current <=180:
+        else:
             st.write('180秒以下です。')
             Y = X[start_cut:]
         
@@ -86,6 +90,36 @@ def cut_wav(filename,time,duration):  # WAVファイルを刈り奪る　形を�
         
     st.write('もとの長さ'+str(original_len))
 
+
+
+def cut_wav2(filename,time,duration):
+
+    # wavファイルの読み込み
+    sound = AudioSegment.from_file(filename, format="wav")
+    original_len = duration
+
+    stom = 1000
+    current = 0
+    idx = 1
+
+
+    while original_len-current>=0:
+        start = current
+        st.write(current)
+        
+        if original_len-current >= 180:
+            sound1 = sound[start:DURATION*stom]
+        else:
+            sound1 = sound[start:]
+
+
+        #ファイルの場所
+        outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav'
+        # 抽出した部分を出力
+        sound1.export(outf, format="wav")
+
+        idx += 1
+        current += DURATION
 
 
 
@@ -126,6 +160,7 @@ if uploaded_file:
                 ffmpeg.run(stream,overwrite_output=True)
 
                 wav_file_path = video_file_path+'.wav'
+                #ディレクトリを生成
                 os.makedirs(video_file_path[:-4]+'/output/')
 
 
@@ -147,7 +182,7 @@ if uploaded_file:
                     '''
                     f_name = wav_file_path
                     cut_time = 180
-                    cut_wav(f_name,cut_time,duration)
+                    cut_wav2(f_name,cut_time,duration)
 
 
 
