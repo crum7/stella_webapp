@@ -19,77 +19,6 @@ def get_playback_seconds_of_movie(fpath):
     return math.ceil(float(ffmpeg.probe(fpath)['streams'][0]['duration']))
 
 
-def cut_wav(filename,time,duration):
-
-
-
-    # timeの単位は[sec]
-
-    # ファイルを読み出し
-    wavf = filename
-    wr = wave.open(wavf, 'r')
-
-    #元ファイルの長さ取得
-    original_len = duration
-
-    # waveファイルが持つ性質を取得
-    ch = wr.getnchannels()
-    width = wr.getsampwidth()
-    fr = wr.getframerate()
-    fn = wr.getnframes()
-    total_time = 1.0 * fn / fr
-    integer = math.floor(total_time) # 小数点以下切り捨て
-    t = int(time)  # 秒数[sec]
-    frames = int(ch * fr * t)
-    num_cut = int(integer//t)
-
-
-    # waveの実データを取得し、数値化
-    data = wr.readframes(wr.getnframes())
-    wr.close()
-    X = fromstring(data, dtype=int16)
-    print(X)
-    
-    
-    current = 0
-    idx = 1
-
-    while original_len-current>=0:
-        start = current
-        st.write(current)
-        # 出力データを生成
-        outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav' 
-        start_cut = start*frames
-        
-        if original_len-current >= 180:
-            end_cut = start*frames + frames
-            Y = X[start_cut:end_cut]
-        else:
-            st.write('180秒以下です。')
-            Y = X[start_cut:]
-        
-        
-        st.write('start_cut'+str(start_cut))
-        st.write('end_cut'+str(end_cut))
-        st.write('original_len-current:'+str(original_len-current))
-        
-
-        
-        outd = struct.pack("h" * len(Y), *Y)
-
-        # 書き出し
-        ww = wave.open(outf, 'w')
-        ww.setnchannels(ch)
-        ww.setsampwidth(width)
-        ww.setframerate(fr)
-        ww.writeframes(outd)
-        ww.close()
-        
-        idx += 1
-        current += DURATION
-        
-    st.write('もとの長さ'+str(original_len))
-
 
 
 def cut_wav2(filename,time,duration):
@@ -98,29 +27,26 @@ def cut_wav2(filename,time,duration):
     sound = AudioSegment.from_file(filename, format="wav")
     original_len = duration
 
+    #秒をmsに直す
     stom = 1000
     current = 0
     idx = 1
 
-
     while original_len-current>=0:
-        current
-        st.write(current)
         
+        #通常に3分に分割
         if original_len-current >= 180:
             sound1 = sound[current:180*stom]
+        #動画の一番最後で3分に満たない
         else:
-            st.write('180秒以下')
             sound1 = sound[current*stom:]
-
-
         #ファイルの場所
         outf = video_file_path[:-4]+'/output/' + str(idx) + '.wav'
         # 抽出した部分を出力
         sound1.export(outf, format="wav")
 
         idx += 1
-        current += DURATION
+        current += 180
 
 
 
@@ -164,47 +90,22 @@ if uploaded_file:
                 #ディレクトリを生成
                 os.makedirs(video_file_path[:-4]+'/output/')
 
-
                 #動画の長さ
                 duration = get_playback_seconds_of_movie(wav_file_path)
-                current = 0
-                idx = 1
+
                 #動画が、3分以上のときに行う
-                if duration >DURATION: 
-                    '''
-                    while current < duration:
-                        start = current
-                        stream = ffmpeg.input(wav_file_path, ss=start, t=60)
-                        stream = ffmpeg.output(stream, video_file_path[:-4]+f'/output/{idx}.wav', c='copy')
-                        ffmpeg.run(stream,overwrite_output=True)
-                        idx += 1
-                        current += DURATION
-                        st.write(current)
-                    '''
+                if duration >180: 
+                    
+                    #動画を3分ずつに分割
                     f_name = wav_file_path
                     cut_time = 180
                     cut_wav2(f_name,cut_time,duration)
 
-
-
-                    st.write(os.listdir(video_file_path[:-4]+'/output/'))
-
-                    #再生
-                    
-                    audio_file = open(video_file_path[:-4]+'/output/1.wav', 'rb')
-                    audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format='audio/wav')
+                    #分割した動画を保存してあるパスへのリンク
+                    saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
+                    new_list_reverse = sorted(saved_splited_wav_path)
                 
-                    audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
-                    audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format='audio/wav')
-                
-
-
-
-
-
-                    for fname in os.listdir(video_file_path[:-4]+'/output/'):
+                    for fname in new_list_reverse:
 
                         #取得したパスを基に音声認識をする
                         st.write(video_file_path[:-4]+'/output/'+fname)
@@ -306,5 +207,4 @@ if youtube_link!='':
         text_from_video = r.recognize_google(audio2, language='ja-JP')
         st.write(text_from_video)
     st.success('Done!')
-
 
