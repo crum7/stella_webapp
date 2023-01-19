@@ -110,17 +110,7 @@ if uploaded_file:
                     saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
                     new_list_reverse = sorted(saved_splited_wav_path)
 
-                    audio_file = open(video_file_path[:-4]+'/output/1.wav', 'rb')
-                    audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format='audio/wav')
 
-                    audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
-                    audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format='audio/wav')
-
-                    audio_file = open(video_file_path[:-4]+'/output/3.wav', 'rb')
-                    audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format='audio/wav')
 
                 
                     for fname in new_list_reverse:
