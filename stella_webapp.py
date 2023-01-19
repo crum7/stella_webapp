@@ -11,6 +11,7 @@ import wave
 import struct
 from scipy import fromstring, int16
 from pydub import AudioSegment
+import datetime
 
 DURATION = 180  # 300 秒ごとに分割する
 
@@ -70,7 +71,10 @@ def cut_wav2(filename,duration):
 
 
 uploaded_file = st.file_uploader("File upload", type=['wav','mp4','mp3'])
-
+#各種フラグのセット
+stop_flag = 0
+video_stop_flag = 0
+speak_data_dict = {}
 
 
 if uploaded_file:
@@ -106,7 +110,17 @@ if uploaded_file:
                     saved_splited_wav_path = os.listdir(video_file_path[:-4]+'/output/')
                     new_list_reverse = sorted(saved_splited_wav_path)
 
+                    audio_file = open(video_file_path[:-4]+'/output/1.wav', 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
 
+                    audio_file = open(video_file_path[:-4]+'/output/2.wav', 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
+
+                    audio_file = open(video_file_path[:-4]+'/output/3.wav', 'rb')
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/wav')
 
                 
                     for fname in new_list_reverse:
@@ -116,6 +130,17 @@ if uploaded_file:
                             audio2 = r.record(source2)
                         text_from_video = r.recognize_google(audio2, language='ja-JP')
                         st.write(text_from_video+'\n')
+                        
+                        
+                        #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                        video_stop_flag=1
+                        #現在の時間
+                        dt_now = datetime.datetime.now()
+                        #辞書に今の時間をキーに、会話データを値として追加する
+                        text_from_video_split = text_from_video.split(' ')
+                        for i in range (0,len(text_from_video_split)):
+                            speak_data_dict[i] = text_from_video_split[i]
+
 
                 #動画が3分以内
                 else:
@@ -125,6 +150,16 @@ if uploaded_file:
                         audio2 = r.record(source2)
                     text_from_video = r.recognize_google(audio2, language='ja-JP')
                     st.write(text_from_video)
+
+
+                                        #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                    video_stop_flag=1
+                    #現在の時間
+                    dt_now = datetime.datetime.now()
+                    #辞書に今の時間をキーに、会話データを値として追加する
+                    text_from_video_split = text_from_video.split(' ')
+                    for i in range (0,len(text_from_video_split)):
+                        speak_data_dict[i] = text_from_video_split[i]
 
         st.success('Done!')
 
@@ -170,6 +205,15 @@ if uploaded_file:
                         text_from_video = r.recognize_google(audio2, language='ja-JP')
                         st.write(text_from_video+'\n')
 
+                        #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                        video_stop_flag=1
+                        #現在の時間
+                        dt_now = datetime.datetime.now()
+                        #辞書に今の時間をキーに、会話データを値として追加する
+                        text_from_video_split = text_from_video.split(' ')
+                        for i in range (0,len(text_from_video_split)):
+                            speak_data_dict[i] = text_from_video_split[i]
+
                 #動画が3分以内
                 else:
                     #取得したパスを基に音声認識をする
@@ -178,6 +222,16 @@ if uploaded_file:
                         audio2 = r.record(source2)
                     text_from_video = r.recognize_google(audio2, language='ja-JP')
                     st.write(text_from_video)
+
+
+                    #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                    video_stop_flag=1
+                    #現在の時間
+                    dt_now = datetime.datetime.now()
+                    #辞書に今の時間をキーに、会話データを値として追加する
+                    text_from_video_split = text_from_video.split(' ')
+                    for i in range (0,len(text_from_video_split)):
+                        speak_data_dict[i] = text_from_video_split[i]
 
         st.success('Done!')
 
@@ -226,6 +280,15 @@ if uploaded_file:
                         text_from_video = r.recognize_google(audio2, language='ja-JP')
                         st.write(text_from_video+'\n')
 
+                        #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                        video_stop_flag=1
+                        #現在の時間
+                        dt_now = datetime.datetime.now()
+                        #辞書に今の時間をキーに、会話データを値として追加する
+                        text_from_video_split = text_from_video.split(' ')
+                        for i in range (0,len(text_from_video_split)):
+                            speak_data_dict[i] = text_from_video_split[i]
+
                 #動画が3分以内
                 else:
                     #取得したパスを基に音声認識をする
@@ -234,6 +297,15 @@ if uploaded_file:
                         audio2 = r.record(source2)
                     text_from_video = r.recognize_google(audio2, language='ja-JP')
                     st.write(text_from_video)
+
+                    #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                    video_stop_flag=1
+                    #現在の時間
+                    dt_now = datetime.datetime.now()
+                    #辞書に今の時間をキーに、会話データを値として追加する
+                    text_from_video_split = text_from_video.split(' ')
+                    for i in range (0,len(text_from_video_split)):
+                        speak_data_dict[i] = text_from_video_split[i]
 
         st.success('Done!')
 
@@ -299,6 +371,15 @@ if youtube_link!='':
                 text_from_video = r.recognize_google(audio2, language='ja-JP')
                 st.write(text_from_video+'\n')
 
+                #video_stop_flagをセットし、音声認識を終了し、解析に移る
+                video_stop_flag=1
+                #現在の時間
+                dt_now = datetime.datetime.now()
+                #辞書に今の時間をキーに、会話データを値として追加する
+                text_from_video_split = text_from_video.split(' ')
+                for i in range (0,len(text_from_video_split)):
+                    speak_data_dict[i] = text_from_video_split[i]
+
         #動画が3分以内
         else:
             #取得したパスを基に音声認識をする
@@ -307,6 +388,16 @@ if youtube_link!='':
                 audio2 = r.record(source2)
             text_from_video = r.recognize_google(audio2, language='ja-JP')
             st.write(text_from_video)
+
+
+            #video_stop_flagをセットし、音声認識を終了し、解析に移る
+            video_stop_flag=1
+            #現在の時間
+            dt_now = datetime.datetime.now()
+            #辞書に今の時間をキーに、会話データを値として追加する
+            text_from_video_split = text_from_video.split(' ')
+            for i in range (0,len(text_from_video_split)):
+                speak_data_dict[i] = text_from_video_split[i]
 
     st.success('Done!')
 
